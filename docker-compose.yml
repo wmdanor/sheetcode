@@ -1,0 +1,11 @@
+services:
+  spring-app:
+    container_name: 'spring-app'
+    build:
+      context: .
+    develop:
+      watch:
+        - action: rebuild
+          path: build/libs
+    ports:
+      - "8080:8080"

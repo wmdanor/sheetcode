@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	// implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
@@ -31,6 +31,12 @@ dependencies {
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+}
+
+tasks.named("bootRun") {
+	mainClass = 'com.sheetcode.SheetcodeApplication'
 }
 
 tasks.named('test') {
