@@ -1,14 +1,5 @@
 services:
-  spring-app:
-    container_name: 'spring-app'
-    build:
-      context: .
-    develop:
-      watch:
-        - action: rebuild
-          path: build/libs
-    ports:
-      - "8080:8080"
+
   postgres:
     image: postgres:17
     environment:
@@ -18,6 +9,14 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.126.0@sha256:973747f78266a8ffec428417727e6b704559e9a30e4be8c1cca2899facd68689
+    volumes:
+      - ./otel-collector.yml:/otel-config.yaml
+    command: [ "--config=/otel-config.yaml" ]
+    ports:
+      - "4317:4317"
 
 volumes:
   pgdata:

@@ -1,2 +1,5 @@
-INSERT INTO test_table (name)
-VALUES ('Name');
+INSERT INTO problems (name)
+VALUES ('3 Sum');
+
+INSERT INTO problems (name)
+VALUES ('Find median of stream');
