@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.jdbi.v3.core.Jdbi;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 

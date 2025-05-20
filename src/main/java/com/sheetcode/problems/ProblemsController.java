@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -25,7 +26,7 @@ public class ProblemsController {
     private ProblemsService problemsService;
 
     @GetMapping("{id}")
-    public GetProblemResponse getProblem(@PathVariable UUID id) {
+    public ResponseEntity<GetProblemResponse> getProblem(@PathVariable UUID id) {
         logger.atInfo()
                 .setMessage("getProblem request")
                 .addKeyValue("id", id)
@@ -37,7 +38,7 @@ public class ProblemsController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "problem not found");
         }
 
-        return new GetProblemResponse(problem.get());
+        return ResponseEntity.ok(new GetProblemResponse(problem.get()));
     }
 
 }
