@@ -49,6 +49,7 @@ command as usual, but using `local` profile: `mvn -Plocal flyway:migrate`.
 
 Seed scripts are intended to only be used for local development.
 
+
 <!-- ## Kubernetes -->
 
 <!-- Install `minikube` - https://minikube.sigs.k8s.io/docs/start. -->
