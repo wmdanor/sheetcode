@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL UNIQUE
 );
 
--- Table: Problems
+-- Table: Problems,
 CREATE TABLE IF NOT EXISTS problems (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(100) NOT NULL UNIQUE,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS submissions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     problem_id UUID NOT NULL,
     language_code VARCHAR(50) NOT NULL,
-    user_id UUID NOT NULL;
+    user_id UUID NOT NULL,
     code TEXT NOT NULL,
     status status NOT NULL,
     execution_time_ms BIGINT,  -- in milliseconds
@@ -60,10 +60,10 @@ CREATE TABLE IF NOT EXISTS submissions (
     error_message VARCHAR(1000),
     submitted_on TIMESTAMPTZ(0) DEFAULT CURRENT_TIMESTAMP,
 
-    ADD CONSTRAINT fk_submission_user
+    CONSTRAINT fk_submission_user
         FOREIGN KEY (user_id)
         REFERENCES users(id)
-        ON DELETE RESTRICT;
+        ON DELETE RESTRICT,
 
     CONSTRAINT fk_problem
         FOREIGN KEY (problem_id)
