@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS language_problems (
     problem_id UUID NOT NULL,
     language_code VARCHAR(50) NOT NULL,
     code_template TEXT NOT NULL,
-    time_limit_ms BIGINT NOT NULL,
+    time_limit_ms INTERVAL NOT NULL,
 
     CONSTRAINT fk_language_problem_problem
         FOREIGN KEY (problem_id)
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS submissions (
     user_id UUID NOT NULL,
     code TEXT NOT NULL,
     status status NOT NULL,
-    execution_time_ms BIGINT,  -- in milliseconds
+    execution_time_ms INTERVAL,  -- in milliseconds
     memory_usage_kb BIGINT,      -- in kilobytes
     error_message VARCHAR(1000),
     submitted_on TIMESTAMPTZ(0) DEFAULT CURRENT_TIMESTAMP,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS executors (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     language_code VARCHAR(50) NOT NULL,
     name VARCHAR(100) NOT NULL UNIQUE,
-    time_limit_ms BIGINT NOT NULL,  -- in ms
+    time_limit_ms INTERVAL NOT NULL,  -- in ms
 
     CONSTRAINT fk_language_executor
         FOREIGN KEY (language_code)
@@ -95,3 +95,11 @@ CREATE INDEX idx_submissions_language_code ON submissions(language_code);
 CREATE INDEX idx_language_problems_problem_id ON language_problems(problem_id);
 CREATE INDEX idx_language_problems_language_code ON language_problems(language_code);
 CREATE INDEX idx_executors_language_code ON executors(language_code);
+
+-- Insert languages
+INSERT INTO ref_languages (language_code, name) VALUES
+  ('python', 'Python'),
+  ('javascript', 'JavaScript'),
+  ('java', 'Java'),
+  ('csharp', 'C#')
+ON CONFLICT (language_code) DO NOTHING;
