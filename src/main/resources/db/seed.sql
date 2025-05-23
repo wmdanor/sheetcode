@@ -1,28 +1,55 @@
--- Seed: Users
-INSERT INTO "User" (username, email) VALUES
-('alice', 'alice@example.com'),
-('bob', 'bob@example.com'),
-('charlie', 'charlie@example.com');
+-- Seed data for ref_languages
+INSERT INTO ref_languages (language_code, name) VALUES
+    ('py', 'Python'),
+    ('js', 'JavaScript'),
+    ('cpp', 'C++')
+ON CONFLICT DO NOTHING;
 
--- Seed: Languages
-INSERT INTO Languages (name) VALUES
-('Python'),
-('JavaScript'),
-('C++');
+-- Seed data for users
+INSERT INTO users (id, username, email) VALUES
+    (gen_random_uuid(), 'alice', 'alice@example.com'),
+    (gen_random_uuid(), 'bob', 'bob@example.com')
+ON CONFLICT DO NOTHING;
 
--- Seed: Problems
-INSERT INTO Problems (name, description, level, test_cases) VALUES
-('Sum of Two Numbers', 'Write a program to sum two integers.', 'easy', '[{"input": "1 2", "output": "3"}, {"input": "5 7", "output": "12"}]'),
-('Palindrome Checker', 'Check if a string is a palindrome.', 'medium', '[{"input": "racecar", "output": "true"}, {"input": "hello", "output": "false"}]');
+-- Seed data for problems
+INSERT INTO problems (id, name, slug, description, level, test_cases) VALUES
+    (gen_random_uuid(), 'Two Sum', 'two-sum', 'Find two numbers that add up to a target.', 'easy', '[{"input": [2, 7, 11, 15], "target": 9, "output": [0, 1]}]'),
+    (gen_random_uuid(), 'Reverse String', 'reverse-string', 'Reverse the input string.', 'easy', '[{"input": "hello", "output": "olleh"}]')
+ON CONFLICT DO NOTHING;
 
--- Seed: Executors
-INSERT INTO Executors (name, language_id, time_limit) VALUES
-('Python Executor', 1, 2.0),
-('JS Runner', 2, 1.5),
-('C++ Compiler', 3, 1.0);
+-- Get problem IDs and assign them for linking
+-- You can replace the SELECTs with actual UUIDs if you want deterministic seeding.
 
--- Seed: Submissions
-INSERT INTO Submissions (problem_id, language_id, code, status, execution_time, memory_usage, error_message) VALUES
-(1, 1, 'print(sum(map(int, input().split())))', 'ok', 0.12, 1024, NULL),
-(2, 2, 'console.log(isPalindrome(input))', 'failure', 0.30, 2048, 'ReferenceError: input is not defined'),
-(1, 3, '#include <iostream>\nint main() { int a,b; std::cin >> a >> b; std::cout << a + b; }', 'ok', 0.05, 512, NULL);
+-- Seed data for language_problems (assuming "Two Sum" and Python)
+INSERT INTO language_problems (id, problem_id, language_code, code_template, time_limit_ms)
+SELECT
+    gen_random_uuid(),
+    p.id,
+    'py',
+    '# Write your solution here\n',
+    2000
+FROM problems p
+WHERE p.slug = 'two-sum'
+ON CONFLICT DO NOTHING;
+
+-- Seed data for submissions
+INSERT INTO submissions (id, problem_id, language_code, code, status, execution_time_ms, memory_usage_kb, error_message)
+SELECT
+    gen_random_uuid(),
+    p.id,
+    'py',
+    'def two_sum(nums, target):\n    ...',
+    'ok',
+    123,
+    2560,
+    NULL
+FROM problems p
+WHERE p.slug = 'two-sum'
+ON CONFLICT DO NOTHING;
+
+-- Seed data for executors
+INSERT INTO executors (id, language_code, name, time_limit_ms) VALUES
+    (gen_random_uuid(), 'py', 'Python Executor', 3000),
+    (gen_random_uuid(), 'js', 'Node Executor', 3000),
+    (gen_random_uuid(), 'cpp', 'C++ Executor', 3000)
+ON CONFLICT DO NOTHING;
